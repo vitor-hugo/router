@@ -47,4 +47,22 @@ trait UriTrait
 
         return true;
     }
+
+    /**
+     * Validate if the route URI has unexpected characters
+     * @param string $route Registered route from a controller
+     * @return bool
+     */
+    private function validateRouteUri(string $route): bool
+    {
+        if (empty($route)) {
+            return true;
+        }
+
+        if (@preg_match('/^[a-zA-Z0-9\/\-\.\{\}]*$/', $route) == false) {
+            return false;
+        }
+
+        return true;
+    }
 }
