@@ -32,6 +32,12 @@ class Route
         return $this->uri;
     }
 
+    public function setUri(string $uri): void
+    {
+        $this->uri = $uri;
+        $this->validate();
+    }
+
     public function getRequestMethod(): RequestMethod
     {
         return $this->requestMethod;
