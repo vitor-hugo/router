@@ -15,42 +15,42 @@ class ValidControllerContract
     #[Get("{id}")]
     public function findOne(string $id)
     {
-        return "Returns a single user data";
+        return "Returns a user with id '$id'.";
     }
 
     #[Get()]
     public function findAll()
     {
-        return "Retuns all users";
+        return "Returns all users.";
     }
 
     #[Post("search")]
     public function searchUsers()
     {
-        return "Returns a filtered list of users";
+        return "Returns a filtered list of users.";
     }
 
     #[Post()]
     public function addUser()
     {
-        return "Adds a new user";
+        return "Adds a new user.";
     }
 
     #[Put("{id}")]
     public function updateUser(string $id)
     {
-        return "Updates an user data";
+        return "Updates the user id '$id'.";
     }
 
     #[Delete("{id}")]
     public function deleteUser(string $id)
     {
-        return "Deactivates an user from database";
+        return "Deactivates the user with id '$id'.";
     }
 
     #[Patch("/status/{id}")]
     public function changeUserStatus(string $id)
     {
-        return "Changes a user status";
+        return "Changes the status of user '$id'.";
     }
 }
