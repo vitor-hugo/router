@@ -141,6 +141,7 @@ class Router
     private function addRoute(Controller $controller, Route $route, ReflectionMethod $method): void
     {
         $uri = "{$this->prefix}{$controller->getUri()}{$route->getUri()}";
+        $route->setUri($uri);
 
         $this->checkIfRouteIsDuplicated($uri, $route->getRequestMethod());
 
