@@ -88,6 +88,15 @@ class RouterTest extends TestCase
         $this->assertEquals("Deactivates the user with id '234829'.", $response);
     }
 
+    #[TestDox("Resolving with route prefix.")]
+    public function testResolveWithRoutePrefix()
+    {
+        $this->router->setPrefix("/v1");
+        $this->router->register(ValidControllerContract::class);
+        $response = $this->router->resolve('/v1/users/2384789', RequestMethod::PUT);
+        $this->assertEquals("Updates the user id '2384789'.", $response);
+    }
+
     #[Depends("testControllerRegistration")]
     #[TestDox("Should Throw InvalidRouteException when route not found.")]
     public function testShouldThrowWhenRouteNotFound(Router $router)
