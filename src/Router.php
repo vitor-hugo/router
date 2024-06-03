@@ -131,7 +131,7 @@ class Router
     }
 
     /**
-     * Summary of addRoute
+     * Add a Controller routes to the router list
      * @param \Torugo\Router\Attributes\Request\Controller $controller
      * @param \Torugo\Router\Attributes\Request\Route $route
      * @param \ReflectionMethod $method
