@@ -10,6 +10,7 @@ use Torugo\Router\Attributes\Request\Route;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Exceptions\InvalidControllerExeception;
 use Torugo\Router\Exceptions\InvalidRouteException;
+use Torugo\Router\Models\Endpoint;
 use Torugo\Router\Traits\UriTrait;
 
 class Router
@@ -62,6 +63,8 @@ class Router
 
         $this->prefix = $prefix;
     }
+
+    // MARK: Routes Registration
 
     /**
      * Register an array of Modules Controllers
@@ -164,5 +167,101 @@ class Router
         if (array_key_exists($uri, $this->routes[$requestMethod->value] ?? [])) {
             throw new InvalidRouteException("Route '$uri' with method '{$requestMethod->value}' is duplicated.", 2);
         }
+    }
+
+    // MARK: Route Resolve
+
+    /**
+     * Resolves the request uri and method, calling the correct endpoint (controler->method(args)).
+     * @param string $uri Request's URI
+     * @param \Torugo\Router\Enums\RequestMethod $requestMethod
+     * @throws \Torugo\Router\Exceptions\InvalidRouteException
+     * @return mixed
+     */
+    public function resolve(string $uri, RequestMethod $requestMethod): mixed
+    {
+        $endpoint = $this->findEndpoint($uri, $requestMethod);
+
+        if ($endpoint == false) {
+            throw new InvalidRouteException("Route '$uri' not found.", 3);
+        }
+
+        return $endpoint->execute();
+    }
+
+    /**
+     * Searches and returns the correct endpoint to be executed, returns false if not found.
+     * @param string $uri Request's uri
+     * @param \Torugo\Router\Enums\RequestMethod $requestMethod
+     * @return \Torugo\Router\Models\Endpoint|false
+     */
+    public function findEndpoint(string $uri, RequestMethod $requestMethod): Endpoint|false
+    {
+        $uri = $this->normalizeUri($uri);
+
+        if (array_key_exists($requestMethod->value, $this->routes) == false) {
+            return false;
+        }
+
+        foreach ($this->routes[$requestMethod->value] as $route) {
+            if ($this->requestUriMatches($uri, $route["route"], $args)) {
+                return new Endpoint($route["controller"], $route["method"], $args ?? []);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the request's uri matches a route in the routes list
+     * @param string $uri Request's uri
+     * @param \Torugo\Router\Attributes\Request\Route $route
+     * @param mixed $args
+     * @return bool
+     */
+    private function requestUriMatches(string $uri, Route $route, ?array &$args = []): bool
+    {
+        $requestUriArray = $this->getUriParts($uri);
+        $routeUriArray = $this->getUriParts($route->getUri());
+
+
+        if (count($requestUriArray) !== count($routeUriArray)) {
+            return false;
+        }
+
+        foreach ($routeUriArray as $index => $uriPart) {
+            if (!isset($requestUriArray[$index])) {
+                return false;
+            }
+
+            if ($uriPart === $requestUriArray[$index]) {
+                continue;
+            }
+
+            if (str_starts_with($uriPart, "{")) {
+                $routeParameter = explode(' ', preg_replace('/{([\w\-%]+)(<(.+)>)?}/', '$1 $3', $uriPart));
+                $argName = $routeParameter[0];
+                $argRegExp = (empty($routeParameter[1]) ? '[\w\-\@]+' : $routeParameter[1]);
+
+                if (preg_match('/^' . $argRegExp . '$/', $requestUriArray[$index])) {
+                    $args[$argName] = $requestUriArray[$index];
+                    continue;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Explodes an URI and retuns it as an array of URI parts
+     * @param string $uri
+     * @return array
+     */
+    private function getUriParts(string $uri): array
+    {
+        $parts = explode("/", $uri);
+        $parts = array_values(array_filter($parts, 'strlen'));
+        return $parts;
     }
 }
