@@ -5,6 +5,8 @@ namespace Torugo\Router;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
+use Torugo\Router\Attributes\Http\Header;
+use Torugo\Router\Attributes\Http\HttpCode;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Route;
 use Torugo\Router\Enums\RequestMethod;
@@ -168,8 +170,9 @@ class Router
             throw new InvalidRouteException("Route '$uri' with method '{$requestMethod->value}' is duplicated.", 2);
         }
     }
-
+    ///////////////////////////////////////////////////////////////////////////////////
     // MARK: Route Resolve
+    ///////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Resolves the request uri and method, calling the correct endpoint (controler->method(args)).
@@ -186,7 +189,11 @@ class Router
             throw new InvalidRouteException("Route '$uri' not found.", 3);
         }
 
-        return $endpoint->execute();
+        $this->setResponseHttpCode($endpoint);
+        $this->setResponseHeaders($endpoint);
+
+        Response::$data = $endpoint->execute() ?? [];
+        return Response::send();
     }
 
     /**
@@ -203,10 +210,15 @@ class Router
             return false;
         }
 
+
         foreach ($this->routes[$requestMethod->value] as $route) {
-            if ($this->requestUriMatches($uri, $route["route"], $args)) {
-                return new Endpoint($route["controller"], $route["method"], $args ?? []);
+            $key = $this->requestUriMatches($uri, $route["route"], $args);
+
+            if ($key) {
+                $endpoint = $this->routes[$requestMethod->value][$key];
+                return new Endpoint($endpoint["controller"], $endpoint["method"], $args ?? []);
             }
+
         }
 
         return false;
@@ -216,14 +228,13 @@ class Router
      * Checks if the request's uri matches a route in the routes list
      * @param string $uri Request's uri
      * @param \Torugo\Router\Attributes\Request\Route $route
-     * @param mixed $args
-     * @return bool
+     * @param array|null $args
+     * @return string|false
      */
-    private function requestUriMatches(string $uri, Route $route, ?array &$args = []): bool
+    private function requestUriMatches(string $uri, Route $route, array|null &$args = []): string|false
     {
         $requestUriArray = $this->getUriParts($uri);
         $routeUriArray = $this->getUriParts($route->getUri());
-
 
         if (count($requestUriArray) !== count($routeUriArray)) {
             return false;
@@ -247,10 +258,12 @@ class Router
                     $args[$argName] = $requestUriArray[$index];
                     continue;
                 }
+            } else {
+                return false;
             }
         }
 
-        return true;
+        return $route->getUri();
     }
 
     /**
@@ -263,5 +276,43 @@ class Router
         $parts = explode("/", $uri);
         $parts = array_values(array_filter($parts, 'strlen'));
         return $parts;
+    }
+
+    // MARK: Response
+
+    /**
+     * Summary of getResponseHttpCode
+     * @param \Torugo\Router\Models\Endpoint $endpoint
+     * @return int
+     */
+    private function setResponseHttpCode(Endpoint $endpoint): void
+    {
+        $refMethod = new ReflectionMethod($endpoint->getController(), $endpoint->getMethod());
+        $attributes = $refMethod->getAttributes(HttpCode::class, ReflectionAttribute::IS_INSTANCEOF);
+
+        if (count($attributes) != 1) {
+            Response::$httpStatusCode = 200;
+            return;
+        }
+
+        Response::$httpStatusCode = $attributes[0]->newInstance()->code;
+    }
+
+    /**
+     * Summary of setResponseHeaders
+     * @param \Torugo\Router\Models\Endpoint $endpoint
+     * @return void
+     */
+    private function setResponseHeaders(Endpoint $endpoint): void
+    {
+        $refMethod = new ReflectionMethod($endpoint->getController(), $endpoint->getMethod());
+        $headers = $refMethod->getAttributes(Header::class, ReflectionAttribute::IS_INSTANCEOF);
+
+        foreach ($headers as $header) {
+            $header = $header->newInstance()->toString();
+            if (!in_array($header, Response::$headers)) {
+                Response::$headers[] = $header;
+            }
+        }
     }
 }
