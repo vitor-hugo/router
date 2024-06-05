@@ -2,6 +2,8 @@
 
 namespace Tests\Router\Unit\Contracts;
 
+use Torugo\Router\Attributes\Http\Header;
+use Torugo\Router\Attributes\Http\HttpCode;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Delete;
 use Torugo\Router\Attributes\Request\Get;
@@ -12,7 +14,12 @@ use Torugo\Router\Attributes\Request\Put;
 #[Controller("users")]
 class ValidControllerContract
 {
-    #[Get("{id}")]
+    #[Get("/noresponse")]
+    public function noResponse()
+    {
+    }
+
+    #[Get("/{id}")]
     public function findOne(string $id)
     {
         return "Returns a user with id '$id'.";
@@ -24,25 +31,29 @@ class ValidControllerContract
         return "Returns all users.";
     }
 
-    #[Post("search")]
+    #[Post("/search")]
     public function searchUsers()
     {
         return "Returns a filtered list of users.";
     }
 
     #[Post()]
+    #[Header("Content-Type", "text/plain")]
+    #[Header("My-Header", "My Header Content")]
+    #[Header("My-Header", "My Header Content")] // duplicated on purpose
+    #[HttpCode(201)]
     public function addUser()
     {
         return "Adds a new user.";
     }
 
-    #[Put("{id}")]
+    #[Put("/{id}")]
     public function updateUser(string $id)
     {
         return "Updates the user id '$id'.";
     }
 
-    #[Delete("{id}")]
+    #[Delete("/{id}")]
     public function deleteUser(string $id)
     {
         return "Deactivates the user with id '$id'.";
