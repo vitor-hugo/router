@@ -16,18 +16,21 @@ class Request
 
     public static function getData(): array
     {
-        try {
-            $data = json_decode(file_get_contents("php://input"), true, JSON_THROW_ON_ERROR);
-        } catch (\Throwable $th) {
-            parse_str(file_get_contents("php://input"), $data);
+        $data = [];
+
+        $data = @json_decode(file_get_contents("php://input"), true);
+
+        if (empty($data) || $data == false) {
+            $data = [];
+            parse_str(file_get_contents('php://input'), $data);
         }
 
-        return $data;
+        return $data ?? [];
     }
 
     public static function getUri(): string
     {
-        $uri = $_SERVER["REQUEST_URI"];
+        $uri = $_SERVER["REQUEST_URI"] ?? "";
         $uri = self::normalizeUri($uri);
         return $uri;
     }
