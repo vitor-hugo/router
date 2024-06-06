@@ -177,6 +177,18 @@ class Router
     ///////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * This method uses the current URI and Request Method withou any filter, if you need
+     * to filter the URI, use the 'resolve' method
+     * @return mixed
+     */
+    public function autoResolve(): mixed
+    {
+        $uri = Request::getUri();
+        $reqMethod = Request::getMethod();
+        return $this->resolve($uri, $reqMethod);
+    }
+
+    /**
      * Resolves the request uri and method, calling the correct endpoint (controler->method(args)).
      * @param string $uri Request's URI
      * @param \Torugo\Router\Enums\RequestMethod $requestMethod
@@ -294,8 +306,13 @@ class Router
             return;
         }
 
-        $location = $attributes[0]->newInstance()->url;
-        header("location: $location");
+        $redirect = $attributes[0]->newInstance();
+        $this->redirect($redirect->url, $redirect->statusCode);
+    }
+
+    public function redirect(string $url, int $statusCode)
+    {
+        header("Location: $url", true, $statusCode);
         exit();
     }
 
