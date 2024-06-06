@@ -8,7 +8,6 @@
  *
  */
 
-use Tests\Router\Integration\Contracts\CostumersController;
 use Tests\Router\Integration\Contracts\MainController;
 use Tests\Router\Integration\Contracts\UsersController;
 use Torugo\Router\Request;
@@ -22,7 +21,6 @@ $router = new Router;
 $router->registerMany([
     MainController::class,
     UsersController::class,
-    CostumersController::class,
 ]);
 
 $uri = Request::getUri();
