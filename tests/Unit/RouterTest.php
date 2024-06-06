@@ -5,6 +5,7 @@ namespace Tests\Router\Unit;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
+use Tests\Router\Unit\Contracts\DuplicatedRouteContract;
 use Tests\Router\Unit\Contracts\ValidControllerContract;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Exceptions\InvalidRouteException;
@@ -131,5 +132,17 @@ class RouterTest extends TestCase
     {
         $response = $router->resolve('/users/noresponse', RequestMethod::GET);
         $this->assertEquals('{"status":200,"data":[]}', $response);
+    }
+
+    #[TestDox("Should throw InvalidRouteException when trying to register a duplicated route.")]
+    public function testShouldThrowOnDuplicatedRoutes()
+    {
+        $this->expectException(InvalidRouteException::class);
+        $this->expectExceptionMessage("Route '/users/search' with method 'post' is duplicated.");
+        $router = new Router;
+        $router->registerMany([
+            ValidControllerContract::class,
+            DuplicatedRouteContract::class,
+        ]);
     }
 }
