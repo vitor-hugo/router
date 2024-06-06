@@ -7,6 +7,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use Torugo\Router\Attributes\Http\Header;
 use Torugo\Router\Attributes\Http\HttpCode;
+use Torugo\Router\Attributes\Http\Redirect;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Route;
 use Torugo\Router\Enums\RequestMethod;
@@ -170,6 +171,7 @@ class Router
             throw new InvalidRouteException("Route '$uri' with method '{$requestMethod->value}' is duplicated.", 2);
         }
     }
+
     ///////////////////////////////////////////////////////////////////////////////////
     // MARK: Route Resolve
     ///////////////////////////////////////////////////////////////////////////////////
@@ -189,6 +191,7 @@ class Router
             throw new InvalidRouteException("Route '$uri' not found.", 3);
         }
 
+        $this->shouldRedirect($endpoint);
         $this->setResponseHttpCode($endpoint);
         $this->setResponseHeaders($endpoint);
 
@@ -278,7 +281,23 @@ class Router
         return $parts;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////
     // MARK: Response
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    private function shouldRedirect(Endpoint $endpoint): void
+    {
+        $refMethod = new ReflectionMethod($endpoint->getController(), $endpoint->getMethod());
+        $attributes = $refMethod->getAttributes(Redirect::class, ReflectionAttribute::IS_INSTANCEOF);
+
+        if (count($attributes) != 1) {
+            return;
+        }
+
+        $location = $attributes[0]->newInstance()->url;
+        header("location: $location");
+        exit();
+    }
 
     /**
      * Summary of getResponseHttpCode
