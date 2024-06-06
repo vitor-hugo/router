@@ -14,7 +14,7 @@ enum RequestMethod: string
 
     public static function tryFromRequest(): static
     {
-        $requestMethod = strtolower($_SERVER['REQUEST_METHOD']);
+        $requestMethod = strtolower($_SERVER['REQUEST_METHOD'] ?? "get");
         $case = self::tryFrom($requestMethod);
 
         if (!$case) {
