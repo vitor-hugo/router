@@ -1,6 +1,5 @@
->  
-> !!! This package is under development !!!
->   
+> [!NOTE]
+> This package is under development.
 
 # Router <!-- omit in toc -->
 
@@ -34,7 +33,7 @@ composer require torugo/router
 
 To run the tests with `make` use:
 
-```shell
+```
 make test
 ```
 
@@ -46,18 +45,22 @@ make testdox
 
 ## Manually
 
+> [!TIP]
+> - You will need to use two terminal windows to run the tests manually.  
+> - All commands must be executed from the project root.
+
 ### 1. Start Test Server <!-- omit in toc -->
+In the first window terminal type:
 ```shell
 php -S localhost\:8000 -t tests/ServerTests/Server/
 ```
 
-### 2. Run the test <!-- omit in toc -->
-
-From the project root, type:
-> You will probably need to use another terminal window.
+### 2. Run the tests <!-- omit in toc -->
+In the second window, from the project root type:
 ```shell
 ./vendor/bin/phpunit
 ```
+
 # Contribute
 
 It is currently not open to contributions, I intend to make it available as soon as possible.
