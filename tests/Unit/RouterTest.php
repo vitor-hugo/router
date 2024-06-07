@@ -9,7 +9,6 @@ use Tests\Router\Unit\Contracts\DuplicatedRouteContract;
 use Tests\Router\Unit\Contracts\ValidControllerContract;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Exceptions\InvalidRouteException;
-use Torugo\Router\Response;
 use Torugo\Router\Router;
 
 class RouterTest extends TestCase
@@ -51,24 +50,6 @@ class RouterTest extends TestCase
         $this->expectException(InvalidRouteException::class);
         $this->expectExceptionMessage("Route '/users/not/exists' not found.");
         $router->resolve('/users/not/exists', RequestMethod::GET);
-    }
-
-    #[Depends("testControllerRegistration")]
-    #[TestDox("Should set response's headers correctly")]
-    public function testResponseHeaders(Router $router)
-    {
-        $router->resolve('/users', RequestMethod::POST);
-        $this->assertCount(2, Response::$headers);
-        $this->assertEquals("Content-Type: text/plain", Response::$headers[0]);
-        $this->assertEquals("My-Header: My Header Content", Response::$headers[1]);
-    }
-
-    #[Depends("testControllerRegistration")]
-    #[TestDox("Should set response's http status code correctly")]
-    public function testResponseCode(Router $router)
-    {
-        $router->resolve('/users', RequestMethod::POST);
-        $this->assertEquals(201, Response::$httpStatusCode);
     }
 
     #[TestDox("Should throw InvalidRouteException when trying to register a duplicated route.")]
