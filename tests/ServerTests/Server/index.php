@@ -27,8 +27,7 @@ $uri = Request::getUri();
 $reqMethod = Request::getMethod();
 
 try {
-    echo $router->resolve($uri, $reqMethod);
+    $router->resolve($uri, $reqMethod);
 } catch (\Throwable $th) {
-    Response::$data = $th->getMessage();
-    echo Response::send();
+    echo Response::send($th->getMessage());
 }
