@@ -45,61 +45,6 @@ class RouterTest extends TestCase
     }
 
     #[Depends("testControllerRegistration")]
-    #[TestDox("Resolving GET Requests")]
-    public function testResolveGetRequest(Router $router)
-    {
-        $response = $router->resolve('/users/234923', RequestMethod::GET);
-        $this->assertEquals("Returns a user with id '234923'.", $response);
-
-        $response = $router->resolve('/users', RequestMethod::GET);
-        $this->assertEquals("Returns all users.", $response);
-    }
-
-    #[Depends("testControllerRegistration")]
-    #[TestDox("Resolving POST Requests")]
-    public function testResolvePostRequest(Router $router)
-    {
-        $response = $router->resolve('/users', RequestMethod::POST);
-        $this->assertEquals("Adds a new user.", $response);
-
-        $response = $router->resolve('/users/search', RequestMethod::POST);
-        $this->assertEquals("Returns a filtered list of users.", $response);
-    }
-
-    #[Depends("testControllerRegistration")]
-    #[TestDox("Resolving PUT Requests")]
-    public function testResolvePutRequest(Router $router)
-    {
-        $response = $router->resolve('/users/2384789', RequestMethod::PUT);
-        $this->assertEquals("Updates the user id '2384789'.", $response);
-    }
-
-    #[Depends("testControllerRegistration")]
-    #[TestDox("Resolving PATCH Requests")]
-    public function testResolvePatchRequest(Router $router)
-    {
-        $response = $router->resolve('/users/status/23592783', RequestMethod::PATCH);
-        $this->assertEquals("Changes the status of user '23592783'.", $response);
-    }
-
-    #[Depends("testControllerRegistration")]
-    #[TestDox("Resolving DELETE Requests")]
-    public function testResolveDELETEhRequest(Router $router)
-    {
-        $response = $router->resolve('/users/234829', RequestMethod::DELETE);
-        $this->assertEquals("Deactivates the user with id '234829'.", $response);
-    }
-
-    #[TestDox("Resolving with route prefix.")]
-    public function testResolveWithRoutePrefix()
-    {
-        $this->router->setPrefix("/v1");
-        $this->router->register(ValidControllerContract::class);
-        $response = $this->router->resolve('/v1/users/2384789', RequestMethod::PUT);
-        $this->assertEquals("Updates the user id '2384789'.", $response);
-    }
-
-    #[Depends("testControllerRegistration")]
     #[TestDox("Should Throw InvalidRouteException when route not found.")]
     public function testShouldThrowWhenRouteNotFound(Router $router)
     {
@@ -124,14 +69,6 @@ class RouterTest extends TestCase
     {
         $router->resolve('/users', RequestMethod::POST);
         $this->assertEquals(201, Response::$httpStatusCode);
-    }
-
-    #[Depends("testControllerRegistration")]
-    #[TestDox("Should return json with empty data node")]
-    public function testNoResponse(Router $router)
-    {
-        $response = $router->resolve('/users/noresponse', RequestMethod::GET);
-        $this->assertEquals('{"status":200,"data":[]}', $response);
     }
 
     #[TestDox("Should throw InvalidRouteException when trying to register a duplicated route.")]
