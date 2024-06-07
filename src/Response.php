@@ -10,7 +10,13 @@ class Response
      * Response data, it is recommended to send arrays
      * @var mixed
      */
-    public static mixed $data = [];
+    private static mixed $data = [];
+
+    /**
+     * Should include in response body, e.g. refresh tokens
+     * @var array
+     */
+    private static array $includes = [];
 
     /**
      * Response's HTTP status code
@@ -25,12 +31,6 @@ class Response
     public static $headers = [];
 
     /**
-     * Should include in response body, e.g. refresh tokens
-     * @var array
-     */
-    private static array $includes = [];
-
-    /**
      * Data to be included on the JSON response body
      * @param array $data
      * @return void
@@ -43,10 +43,13 @@ class Response
     /**
      * Sends the response, if the data type is array it will be sent as JSON,
      * in other cases will be sent as RAW data
+     * @param mixed $data
      * @return mixed
      */
-    public static function send(): mixed
+    public static function send(mixed $data): mixed
     {
+        self::$data = $data;
+
         http_response_code(self::$httpStatusCode);
         self::setHeaders();
 
