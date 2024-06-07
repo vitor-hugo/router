@@ -181,11 +181,11 @@ class Router
      * to filter the URI, use the 'resolve' method
      * @return mixed
      */
-    public function autoResolve(): mixed
+    public function autoResolve(): void
     {
         $uri = Request::getUri();
         $reqMethod = Request::getMethod();
-        return $this->resolve($uri, $reqMethod);
+        $this->resolve($uri, $reqMethod);
     }
 
     /**
