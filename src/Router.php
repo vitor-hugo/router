@@ -195,7 +195,7 @@ class Router
      * @throws \Torugo\Router\Exceptions\InvalidRouteException
      * @return mixed
      */
-    public function resolve(string $uri, RequestMethod $requestMethod): mixed
+    public function resolve(string $uri, RequestMethod $requestMethod): void
     {
         $endpoint = $this->findEndpoint($uri, $requestMethod);
 
@@ -203,12 +203,7 @@ class Router
             throw new InvalidRouteException("Route '$uri' not found.", 3);
         }
 
-        $this->shouldRedirect($endpoint);
-        $this->setResponseHttpCode($endpoint);
-        $this->setResponseHeaders($endpoint);
-
-        Response::$data = $endpoint->execute() ?? [];
-        return Response::send();
+        $this->sendResponse($endpoint);
     }
 
     /**
@@ -296,6 +291,28 @@ class Router
     ///////////////////////////////////////////////////////////////////////////////////
     // MARK: Response
     ///////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Summary of sendResponse
+     * @param \Torugo\Router\Models\Endpoint $endpoint
+     * @return void
+     */
+    private function sendResponse(Endpoint $endpoint): void
+    {
+        $this->shouldRedirect($endpoint);
+        $this->setResponseHttpCode($endpoint);
+        $this->setResponseHeaders($endpoint);
+
+        $data = [];
+
+        try {
+            $data = $endpoint->execute() ?? [];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        echo Response::send($data);
+    }
 
     private function shouldRedirect(Endpoint $endpoint): void
     {
