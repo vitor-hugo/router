@@ -2,7 +2,7 @@
 
 namespace Tests\Router\ServerTests\Contracts;
 
-use Torugo\Router\Attributes\Http\HttpCode;
+use Torugo\Router\Attributes\Response\HttpCode;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Delete;
 use Torugo\Router\Attributes\Request\Get;

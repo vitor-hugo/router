@@ -2,8 +2,8 @@
 
 namespace Tests\Router\ServerTests\Contracts;
 
-use Torugo\Router\Attributes\Http\Header;
-use Torugo\Router\Attributes\Http\Redirect;
+use Torugo\Router\Attributes\Response\Header;
+use Torugo\Router\Attributes\Response\Redirect;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Delete;
 use Torugo\Router\Attributes\Request\Get;

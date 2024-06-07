@@ -29,5 +29,5 @@ $reqMethod = Request::getMethod();
 try {
     $router->resolve($uri, $reqMethod);
 } catch (\Throwable $th) {
-    echo Response::send($th->getMessage());
+    Response::send($th->getMessage());
 }
