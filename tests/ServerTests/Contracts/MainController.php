@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Router\Integration\Contracts;
+namespace Tests\Router\ServerTests\Contracts;
 
 use Torugo\Router\Attributes\Http\Header;
 use Torugo\Router\Attributes\Http\Redirect;

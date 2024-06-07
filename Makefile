@@ -6,11 +6,11 @@ help:
 	@echo "  testdox       to perform the tests with testdox"
 
 start-server:
-	php -S localhost\:8000 -t tests/Integration/Server/ &
+	nohup php -H -S localhost\:8000 -t tests/ServerTests/Server/ > /dev/null 2>&1 &
 
 stop-server:
 	@PID=$(shell ps axo pid,command \
-	| grep 'tests/Integration/Server/' \
+	| grep 'tests/ServerTests/Server/' \
 	  | grep -v grep \
 	  | cut -f 1 -d " "\
 	) && [ -n "$$PID" ] && kill $$PID || true

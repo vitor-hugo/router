@@ -4,12 +4,12 @@
  *
  * This file is used to run request tests
  *
- * From the root direct type: php -S localhost:8000 -t ./tests/Integration/Server/
+ * From the root direct type: php -S localhost:8000 -t ./tests/ServerTests/Server/
  *
  */
 
-use Tests\Router\Integration\Contracts\MainController;
-use Tests\Router\Integration\Contracts\UsersController;
+use Tests\Router\ServerTests\Contracts\MainController;
+use Tests\Router\ServerTests\Contracts\UsersController;
 use Torugo\Router\Request;
 use Torugo\Router\Response;
 use Torugo\Router\Router;

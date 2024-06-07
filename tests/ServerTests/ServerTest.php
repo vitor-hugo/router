@@ -1,19 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Router\Integration;
+namespace Tests\Router\ServerTests;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Tests\Router\Integration\Contracts\CostumersController;
-use Tests\Router\Integration\Contracts\MainController;
-use Tests\Router\Integration\Contracts\UsersController;
-use Torugo\Router\Router;
 
-#[TestDox("Integration Tests")]
-#[Group("Integration")]
-class IntegrationTest extends TestCase
+#[TestDox("Server Tests")]
+#[Group("Server")]
+class ServerTest extends TestCase
 {
     private Client $client;
 
