@@ -293,7 +293,7 @@ class Router
     ///////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Summary of sendResponse
+     * Sends the response data
      * @param \Torugo\Router\Models\Endpoint $endpoint
      * @return void
      */
