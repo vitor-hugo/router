@@ -82,10 +82,11 @@ class UsersController
 
     #[Get("/avatar/{id}")]
     #[NoResponse()]
+    #[Header("Content-Type", "image/png")]
+    #[Header("MyHeader", "Custom Header")]
+    #[HttpCode(200)]
     public function getAvatarImage(string $id)
     {
-        http_response_code(200);
-        header("Content-Type: text/plain;charset=UTF-8");
         echo "user avatar with id '$id'";
     }
 }

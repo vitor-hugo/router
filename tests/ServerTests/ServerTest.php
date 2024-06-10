@@ -120,7 +120,9 @@ class ServerTest extends TestCase
         $text = $response->getBody()->getContents();
         $this->assertEquals("user avatar with id '12345'", $text);
 
-        $header = $response->getHeader("Content-Type")[0];
-        $this->assertEquals($header, "text/plain;charset=UTF-8");
+        $header1 = $response->getHeader("Content-Type")[0];
+        $header2 = $response->getHeader("MyHeader")[0];
+        $this->assertEquals($header1, "image/png");
+        $this->assertEquals($header2, "Custom Header");
     }
 }
