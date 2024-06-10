@@ -11,7 +11,6 @@
 use Tests\Router\ServerTests\Contracts\MainController;
 use Tests\Router\ServerTests\Contracts\UsersController;
 use Torugo\Router\Request;
-use Torugo\Router\Response;
 use Torugo\Router\Router;
 
 require "../../../vendor/autoload.php";
