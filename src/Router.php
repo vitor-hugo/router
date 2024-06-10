@@ -324,13 +324,7 @@ class Router
         }
 
         $redirect = $attributes[0]->newInstance();
-        $this->redirect($redirect->url, $redirect->statusCode);
-    }
-
-    public function redirect(string $url, int $statusCode)
-    {
-        header("Location: $url", true, $statusCode);
-        exit();
+        Request::redirect($redirect->url, $redirect->statusCode);
     }
 
     /**
