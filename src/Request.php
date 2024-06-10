@@ -3,6 +3,7 @@
 namespace Torugo\Router;
 
 use Torugo\Router\Enums\RequestMethod;
+use Torugo\Router\Exceptions\InvalidRouteException;
 
 /**
  * Access to Request's method, uri and data
@@ -44,5 +45,21 @@ class Request
         }
 
         return $uri;
+    }
+
+    /**
+     * Redirects the current request to a new URL
+     * @param string $url URL to be redirected
+     * @param int $statusCode HTTP status code. (default is 301)
+     * @return never
+     */
+    public static function redirect(string $url, int $statusCode = 301): never
+    {
+        if (!preg_match('/^[a-zA-Z0-9\-\_\.\~\!\*\'\(\)\;\:\@\&\=\+\$\,\/\?\%\#\[\]]*$/', $url)) {
+            throw new InvalidRouteException("Invalid redirection URL.", 1);
+        }
+
+        header("Location: $url", true, $statusCode);
+        exit();
     }
 }
