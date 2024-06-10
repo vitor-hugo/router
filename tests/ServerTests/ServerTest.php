@@ -116,8 +116,11 @@ class ServerTest extends TestCase
     #[TestDox("Should not send the default response")]
     public function testShouldNotSendDefaultResponse(): void
     {
-        $this->expectNotToPerformAssertions();
         $response = $this->client->request("GET", "/users/avatar/12345");
-        var_dump($response->getBody()->getContents());
+        $text = $response->getBody()->getContents();
+        $this->assertEquals("user avatar with id '12345'", $text);
+
+        $header = $response->getHeader("Content-Type")[0];
+        $this->assertEquals($header, "text/plain;charset=UTF-8");
     }
 }
