@@ -303,16 +303,16 @@ class Router
         $this->setResponseHttpCode($endpoint);
         $this->setResponseHeaders($endpoint);
 
-        if ($this->shouldSendResponse($endpoint) == false) {
-            return;
-        }
-
         $data = [];
 
         try {
             $data = $endpoint->execute() ?? [];
         } catch (\Throwable $th) {
             throw $th;
+        }
+
+        if ($this->shouldSendResponse($endpoint) == false) {
+            return;
         }
 
         echo Response::send($data);
