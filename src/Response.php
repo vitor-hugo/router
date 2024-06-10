@@ -25,12 +25,6 @@ class Response
     public static int $httpStatusCode = 200;
 
     /**
-     * Should include headers strings. E.g. "Server: ProvaJa/Api", "Content-Type: text/html; charset=utf-8"
-     * @var array Array of strings
-     */
-    public static $headers = [];
-
-    /**
      * Data to be included on the JSON response body
      * @param array $data
      * @return void
@@ -51,7 +45,6 @@ class Response
         self::$data = $data;
 
         http_response_code(self::$httpStatusCode);
-        self::setHeaders();
 
         if (gettype(self::$data) == "array") {
             return self::sendJson();
@@ -65,15 +58,9 @@ class Response
      * Defines the response headers
      * @return void
      */
-    private static function setHeaders(): void
+    public static function setHeader(string $header): void
     {
-        foreach (self::$headers as $header) {
-            if (gettype($header) !== "string") {
-                continue;
-            }
-
-            header($header);
-        }
+        header($header);
     }
 
     /**

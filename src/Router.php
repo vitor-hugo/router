@@ -351,9 +351,7 @@ class Router
 
         foreach ($headers as $header) {
             $header = $header->newInstance()->toString();
-            if (!in_array($header, Response::$headers)) {
-                Response::$headers[] = $header;
-            }
+            Response::setHeader($header);
         }
     }
 
