@@ -299,7 +299,7 @@ class Router
      */
     private function sendResponse(Endpoint $endpoint): void
     {
-        $this->shouldRedirect($endpoint);
+        $this->redirectIfNecessary($endpoint);
         $this->setResponseHttpCode($endpoint);
         $this->setResponseHeaders($endpoint);
 
@@ -314,7 +314,7 @@ class Router
         echo Response::send($data);
     }
 
-    private function shouldRedirect(Endpoint $endpoint): void
+    private function redirectIfNecessary(Endpoint $endpoint): void
     {
         $refMethod = new ReflectionMethod($endpoint->getController(), $endpoint->getMethod());
         $attributes = $refMethod->getAttributes(Redirect::class, ReflectionAttribute::IS_INSTANCEOF);
