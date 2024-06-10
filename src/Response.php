@@ -86,7 +86,6 @@ class Response
         header('Content-Type: application/json; charset=utf-8');
 
         $response = [
-            'status' => self::$httpStatusCode,
             'data' => self::$data,
             ...self::$includes
         ];
