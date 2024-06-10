@@ -2,6 +2,7 @@
 
 namespace Tests\Router\ServerTests\Contracts;
 
+use Torugo\Router\Attributes\Response\Header;
 use Torugo\Router\Attributes\Response\HttpCode;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Delete;
@@ -9,6 +10,7 @@ use Torugo\Router\Attributes\Request\Get;
 use Torugo\Router\Attributes\Request\Patch;
 use Torugo\Router\Attributes\Request\Post;
 use Torugo\Router\Attributes\Request\Put;
+use Torugo\Router\Attributes\Response\NoResponse;
 use Torugo\Router\Request;
 
 #[Controller("/users")]
@@ -76,5 +78,14 @@ class UsersController
         }
 
         return $this->users;
+    }
+
+    #[Get("/avatar/{id}")]
+    #[NoResponse()]
+    #[HttpCode(200)]
+    #[Header("Content-Type", "image/png;")]
+    public function getAvatarImage(string $id)
+    {
+        echo "user avatar with id '$id'";
     }
 }
