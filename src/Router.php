@@ -7,6 +7,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use Torugo\Router\Attributes\Response\Header;
 use Torugo\Router\Attributes\Response\HttpCode;
+use Torugo\Router\Attributes\Response\NoResponse;
 use Torugo\Router\Attributes\Response\Redirect;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Route;
@@ -228,7 +229,6 @@ class Router
                 $endpoint = $this->routes[$requestMethod->value][$key];
                 return new Endpoint($endpoint["controller"], $endpoint["method"], $args ?? []);
             }
-
         }
 
         return false;
@@ -303,6 +303,10 @@ class Router
         $this->setResponseHttpCode($endpoint);
         $this->setResponseHeaders($endpoint);
 
+        if ($this->shouldSendResponse($endpoint) == false) {
+            return;
+        }
+
         $data = [];
 
         try {
@@ -327,11 +331,6 @@ class Router
         Request::redirect($redirect->url, $redirect->statusCode);
     }
 
-    /**
-     * Summary of getResponseHttpCode
-     * @param \Torugo\Router\Models\Endpoint $endpoint
-     * @return int
-     */
     private function setResponseHttpCode(Endpoint $endpoint): void
     {
         $refMethod = new ReflectionMethod($endpoint->getController(), $endpoint->getMethod());
@@ -345,11 +344,6 @@ class Router
         Response::$httpStatusCode = $attributes[0]->newInstance()->code;
     }
 
-    /**
-     * Summary of setResponseHeaders
-     * @param \Torugo\Router\Models\Endpoint $endpoint
-     * @return void
-     */
     private function setResponseHeaders(Endpoint $endpoint): void
     {
         $refMethod = new ReflectionMethod($endpoint->getController(), $endpoint->getMethod());
@@ -361,5 +355,22 @@ class Router
                 Response::$headers[] = $header;
             }
         }
+    }
+
+    private function shouldSendResponse(Endpoint $endpoint): bool
+    {
+        $refClass = new ReflectionClass($endpoint->getController());
+        $refMethod = new ReflectionMethod($endpoint->getController(), $endpoint->getMethod());
+
+        $attributes = [
+            ...$refClass->getAttributes(NoResponse::class, ReflectionAttribute::IS_INSTANCEOF),
+            ...$refMethod->getAttributes(NoResponse::class, ReflectionAttribute::IS_INSTANCEOF)
+        ];
+
+        if (count($attributes) > 0) {
+            return false;
+        }
+
+        return true;
     }
 }
