@@ -112,4 +112,12 @@ class ServerTest extends TestCase
         $search = array_search("3", array_column($json["data"], "id"));
         $this->assertFalse($search);
     }
+
+    #[TestDox("Should not send the default response")]
+    public function testShouldNotSendDefaultResponse(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $response = $this->client->request("GET", "/users/avatar/12345");
+        var_dump($response->getBody()->getContents());
+    }
 }
