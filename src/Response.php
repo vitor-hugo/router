@@ -19,12 +19,6 @@ class Response
     private static array $includes = [];
 
     /**
-     * Response's HTTP status code
-     * @var int
-     */
-    public static int $httpStatusCode = 200;
-
-    /**
      * Data to be included on the JSON response body
      * @param array $data
      * @return void
@@ -44,8 +38,6 @@ class Response
     {
         self::$data = $data;
 
-        http_response_code(self::$httpStatusCode);
-
         if (gettype(self::$data) == "array") {
             return self::sendJson();
         } else {
@@ -55,12 +47,22 @@ class Response
     }
 
     /**
-     * Defines the response headers
+     * Defines a response header
      * @return void
      */
     public static function setHeader(string $header): void
     {
         header($header);
+    }
+
+    /**
+     * Defines the response status code
+     * @param int $code
+     * @return void
+     */
+    public static function setStatusCode(int $code): void
+    {
+        http_response_code($code);
     }
 
     /**

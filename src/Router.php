@@ -337,11 +337,11 @@ class Router
         $attributes = $refMethod->getAttributes(HttpCode::class, ReflectionAttribute::IS_INSTANCEOF);
 
         if (count($attributes) != 1) {
-            Response::$httpStatusCode = 200;
+            Response::setStatusCode(200);
             return;
         }
 
-        Response::$httpStatusCode = $attributes[0]->newInstance()->code;
+        Response::setStatusCode($attributes[0]->newInstance()->code);
     }
 
     private function setResponseHeaders(Endpoint $endpoint): void
