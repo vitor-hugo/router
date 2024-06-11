@@ -62,4 +62,32 @@ class Request
         header("Location: $url", true, $statusCode);
         exit();
     }
+
+    /**
+     * Returns an array ['HeaderName' => 'HeaderValue'] list with all request headers
+     * @return array
+     */
+    public static function getHeaders(): array
+    {
+        return getallheaders();
+    }
+
+    /**
+     * Returns all values as an array of strings, if not found returns an empty array.
+     * @param string $headerName Name of the required header
+     * @return array
+     */
+    public static function getHeader(string $headerName): array
+    {
+        $result = [];
+
+        $headerName = mb_strtoupper($headerName);
+        foreach (getallheaders() as $name => $value) {
+            if ($headerName == mb_strtoupper($name)) {
+                $result[] = $value;
+            }
+        }
+
+        return $result;
+    }
 }
