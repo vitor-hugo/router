@@ -221,7 +221,6 @@ class Router
             return false;
         }
 
-
         foreach ($this->routes[$requestMethod->value] as $route) {
             $key = $this->requestUriMatches($uri, $route["route"], $args);
 
