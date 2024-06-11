@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Router\Contracts;
+namespace Tests\Router\Contracts\Controllers;
 
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Delete;

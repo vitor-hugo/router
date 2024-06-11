@@ -4,8 +4,7 @@
  * This server is used to run the tests
  */
 
-use Tests\Router\Contracts\UnitController;
-use Torugo\Router\Request;
+use Tests\Router\Contracts\Controllers\UnitController;
 use Torugo\Router\Router;
 
 require "../../vendor/autoload.php";
@@ -20,5 +19,5 @@ try {
     $router->autoResolve();
 } catch (\Throwable $th) {
     http_response_code(400);
-    echo $th->getMessage();
+    exit($th->getMessage());
 }
