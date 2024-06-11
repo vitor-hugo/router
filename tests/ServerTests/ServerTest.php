@@ -24,11 +24,11 @@ class ServerTest extends TestCase
         $response = $this->client->request('GET', '/', ['allow_redirects' => true]);
         $body = $response->getBody()->getContents();
         $statusCode = $response->getStatusCode();
-        $header = $response->getHeader("Content-Type")[0];
+        $header = $response->getHeader("Redirected")[0];
 
-        $this->assertEquals("index", $body);
+        $this->assertEquals('{"data":"index"}', $body);
         $this->assertEquals(200, $statusCode);
-        $this->assertEquals("text/plain;charset=UTF-8", $header);
+        $this->assertEquals("true", $header);
     }
 
     #[TestDox("Should redirect to a external URL")]
@@ -131,6 +131,24 @@ class ServerTest extends TestCase
     {
         $response = $this->client->request('POST', '/users/auth', ['headers' => ["Authorization" => "Auth_Token"]]);
         $body = $response->getBody()->getContents();
-        $this->assertEquals('1', $body);
+        $this->assertEquals('{"data":true}', $body);
+    }
+
+    #[TestDox("Middleware should includes some data in response")]
+    public function testMiddleware(): void
+    {
+        $response = $this->client->request('GET', '/isauth');
+        $body = $response->getBody()->getContents();
+        $this->assertEquals('{"data":"is authenticated","token":"renewed token"}', $body);
+    }
+
+    #[TestDox("Middleware should throw an exception")]
+    public function testMiddlewareException(): void
+    {
+        $response = $this->client->request('GET', '/notauth', ['http_errors' => false]);
+        $statusCode = $response->getStatusCode();
+        $body = $response->getBody()->getContents();
+        $this->assertEquals(400, $statusCode);
+        $this->assertEquals("User is not authenticated", $body);
     }
 }

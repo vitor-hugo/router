@@ -2,6 +2,7 @@
 
 namespace Tests\Router\ServerTests\Contracts;
 
+use Torugo\Router\Attributes\Middleware;
 use Torugo\Router\Attributes\Response\Header;
 use Torugo\Router\Attributes\Response\Redirect;
 use Torugo\Router\Attributes\Request\Controller;
@@ -25,7 +26,7 @@ class MainController
     }
 
     #[Get("/index")]
-    #[Header("Content-Type", "text/plain;charset=UTF-8")]
+    #[Header("Redirected", "true")]
     public function index()
     {
         return "index";
@@ -35,5 +36,20 @@ class MainController
     #[Redirect("https://google.com", 302)]
     public function redirectToGoole()
     {
+    }
+
+    #[Get("/isauth")]
+    #[Middleware(AuthMiddleware::class, 'isAuthenticated', ["isAuth" => true])]
+    #[Middleware(AuthMiddleware::class, 'renewToken')]
+    public function isAuth()
+    {
+        return "is authenticated";
+    }
+
+    #[Get("/notauth")]
+    #[Middleware(AuthMiddleware::class, 'isAuthenticated', ["isAuth" => false])]
+    public function isNotAuth()
+    {
+        return "is authenticated";
     }
 }
