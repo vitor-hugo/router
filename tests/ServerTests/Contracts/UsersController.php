@@ -89,4 +89,15 @@ class UsersController
     {
         echo "user avatar with id '$id'";
     }
+
+    #[Post("/auth")]
+    public function mustBeAuthenticated()
+    {
+        $header = Request::getHeader("Authorization");
+        if ($header[0] == "Auth_Token") {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

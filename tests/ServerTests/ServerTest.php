@@ -125,4 +125,12 @@ class ServerTest extends TestCase
         $this->assertEquals($header1, "image/png");
         $this->assertEquals($header2, "Custom Header");
     }
+
+    #[TestDox("Should validate a header")]
+    public function testShouldValidateAHeader(): void
+    {
+        $response = $this->client->request('POST', '/users/auth', ['headers' => ["Authorization" => "Auth_Token"]]);
+        $body = $response->getBody()->getContents();
+        $this->assertEquals('1', $body);
+    }
 }
