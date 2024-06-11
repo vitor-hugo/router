@@ -14,6 +14,7 @@ use Torugo\Router\Attributes\Request\Route;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Exceptions\InvalidControllerExeception;
 use Torugo\Router\Exceptions\InvalidRouteException;
+use Torugo\Router\Handlers\MiddlewareHandler;
 use Torugo\Router\Models\Endpoint;
 use Torugo\Router\Traits\UriTrait;
 
@@ -204,6 +205,7 @@ class Router
             throw new InvalidRouteException("Route '$uri' not found.", 3);
         }
 
+        $this->handleMiddlewares($endpoint);
         $this->sendResponse($endpoint);
     }
 
@@ -285,6 +287,15 @@ class Router
         $parts = explode("/", $uri);
         $parts = array_values(array_filter($parts, 'strlen'));
         return $parts;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    // MARK: Middlware handler
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    private function handleMiddlewares(Endpoint $endpoint): void
+    {
+        MiddlewareHandler::handle($endpoint);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
