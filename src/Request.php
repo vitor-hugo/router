@@ -8,7 +8,7 @@ use Torugo\Router\Exceptions\InvalidRouteException;
 /**
  * Access to Request's method, uri and data
  */
-class Request
+final class Request
 {
     public static function getMethod(): RequestMethod
     {

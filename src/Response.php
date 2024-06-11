@@ -4,7 +4,7 @@ namespace Torugo\Router;
 
 use Torugo\Router\Exceptions\InvalidResponseException;
 
-class Response
+final class Response
 {
     /**
      * Response data, it is recommended to send arrays
