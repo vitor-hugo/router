@@ -37,13 +37,7 @@ final class Response
     public static function send(mixed $data): mixed
     {
         self::$data = $data;
-
-        if (gettype(self::$data) == "array") {
-            return self::sendJson();
-        } else {
-            // Send raw data
-            return self::$data;
-        }
+        return self::sendJson();
     }
 
     /**
@@ -84,6 +78,9 @@ final class Response
         if ($json == false || $json == null) {
             throw new InvalidResponseException("Unable to convert response to JSON", 2);
         }
+
+        self::$data = [];
+        self::$includes = [];
 
         return $json;
     }
