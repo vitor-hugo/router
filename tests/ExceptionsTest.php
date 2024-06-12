@@ -5,6 +5,7 @@ namespace Tests\Router;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Tests\Router\Contracts\Controllers\DuplicatedRouteController;
+use Tests\Router\Contracts\Controllers\InvalidController;
 use Tests\Router\Contracts\Controllers\NotAController;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Exceptions\InvalidControllerExeception;
@@ -59,5 +60,14 @@ class ExceptionsTest extends TestCase
         $this->expectException(InvalidControllerExeception::class);
         $this->expectExceptionMessage("The controller 'Tests\Router\Contracts\Controllers\NotAController' is invalid, controllers must use #[Controller()] attribute.");
         $this->router->register(NotAController::class);
+    }
+
+    #[TestDox("Must throw InvalidRouteException when trying to redirect to an invalid url.")]
+    public function testShouldThrowWhenTryingToRedirectToInvalidUrl()
+    {
+        $this->expectException(InvalidRouteException::class);
+        $this->expectExceptionMessage("Invalid redirection URL.");
+        $this->router->register(InvalidController::class);
+        $this->router->resolve("/invalid/redirect", RequestMethod::GET);
     }
 }
