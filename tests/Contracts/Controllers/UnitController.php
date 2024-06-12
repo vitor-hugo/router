@@ -57,10 +57,11 @@ class UnitController
         return $value;
     }
 
-    #[Route('/patch', RequestMethod::PATCH)]
-    public function patchRoute()
+    #[Route('/patch/{id}', RequestMethod::PATCH)]
+    public function patchRoute(string $id)
     {
         $requestData = Request::getData();
+        $requestData["id"] = $id;
         return $requestData;
     }
 
@@ -71,10 +72,11 @@ class UnitController
         return $requestData;
     }
 
-    #[Route('/put', RequestMethod::PUT)]
-    public function putRoute()
+    #[Route('/put/{id}', RequestMethod::PUT)]
+    public function putRoute(string $id)
     {
         $requestData = Request::getData();
+        $requestData["id"] = $id;
         return $requestData;
     }
 }

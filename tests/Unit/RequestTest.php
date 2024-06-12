@@ -100,20 +100,23 @@ class SimpleRequestTest extends TestCase
     {
         $payload = ["first_name" => "Clarice", "last_name" => "Lispector"];
 
-        $response = $this->client->patch("/unit/patch", ["form_params" => $payload]);
+        $response = $this->client->patch("/unit/patch/54321", ["form_params" => $payload]);
         $data = $this->getResponseData($response);
 
-        $this->assertArrayIsEqualToArrayIgnoringListOfKeys($payload, $data, []);
+        $this->assertArrayIsEqualToArrayIgnoringListOfKeys($payload, $data, ["id"]);
+        $this->assertEquals("54321", $data["id"]);
     }
 
-    #[TestDox("Perform a PUT request with form input")]
+    #[TestDox("Perform a PUT request with form input and url parameter\n")]
     public function testPutRequestWithFormInput()
     {
         $payload = ["first_name" => "Conceição", "last_name" => "Evaristo"];
 
-        $response = $this->client->put("/unit/put", ["form_params" => $payload]);
+        $response = $this->client->put("/unit/put/12345", ["form_params" => $payload]);
         $data = $this->getResponseData($response);
 
-        $this->assertArrayIsEqualToArrayIgnoringListOfKeys($payload, $data, []);
+        $this->assertArrayIsEqualToArrayIgnoringListOfKeys($payload, $data, ["id"]);
+        $this->assertEquals("12345", $data["id"]);
+    }
     }
 }
