@@ -19,6 +19,7 @@ trait UriTrait
     private function normalizeUri(string $uri): string
     {
         $uri = rtrim(trim($uri), "/");
+        $uri = preg_replace('/\/{2,}/', "/", $uri);
 
         if (!str_starts_with($uri, "/")) {
             $uri = "/" . $uri;
