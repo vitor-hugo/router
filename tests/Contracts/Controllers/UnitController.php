@@ -12,6 +12,7 @@ use Torugo\Router\Attributes\Request\Post;
 use Torugo\Router\Attributes\Request\Put;
 use Torugo\Router\Attributes\Request\Route;
 use Torugo\Router\Attributes\Response\Header;
+use Torugo\Router\Attributes\Response\HttpCode;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Request;
 
@@ -96,5 +97,12 @@ class UnitController
     public function header()
     {
         return "Testing header";
+    }
+
+    #[Post("/status")]
+    #[HttpCode(256)]
+    public function statusCode()
+    {
+        return "Testing HTTP status code";
     }
 }

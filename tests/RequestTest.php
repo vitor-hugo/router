@@ -143,4 +143,14 @@ class RequestTest extends TestCase
 
         $this->assertEquals("Testing header", $body);
     }
+
+    #[TestDox("HttpCode attribute must set the status code correctly")]
+    public function testHttpStatusCode()
+    {
+        $response = $this->client->post("/unit/status");
+        $body = $this->getResponseData($response);
+
+        $this->assertEquals(256, $response->getStatusCode());
+        $this->assertEquals("Testing HTTP status code", $body);
+    }
 }
