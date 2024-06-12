@@ -3,13 +3,11 @@
 namespace Tests\Router;
 
 use GuzzleHttp\Client;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
-#[Group("Unit")]
-#[TestDox("Simple Request Tests")]
+#[TestDox("Request Tests")]
 class SimpleRequestTest extends TestCase
 {
     private Client $client;
