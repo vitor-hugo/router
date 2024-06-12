@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests\Router\Unit;
+namespace Tests\Router;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\Group;
