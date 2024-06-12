@@ -11,6 +11,7 @@ use Torugo\Router\Attributes\Request\Patch;
 use Torugo\Router\Attributes\Request\Post;
 use Torugo\Router\Attributes\Request\Put;
 use Torugo\Router\Attributes\Request\Route;
+use Torugo\Router\Attributes\Response\Header;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Request;
 
@@ -87,5 +88,13 @@ class UnitController
     public function middleware()
     {
         return "this is de main data";
+    }
+
+    #[Get("/header")]
+    #[Header("MyHeader", "My Header Content")]
+    #[Header("OtherHeader", "This is another header")]
+    public function header()
+    {
+        return "Testing header";
     }
 }

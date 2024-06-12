@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
 #[TestDox("Request Tests")]
-class SimpleRequestTest extends TestCase
+class RequestTest extends TestCase
 {
     private Client $client;
 
@@ -126,5 +126,21 @@ class SimpleRequestTest extends TestCase
 
         $this->assertEquals("this is de main data", $json["data"]);
         $this->assertEquals("This data was defined in a middleware", $json["middleware"]);
+    }
+
+    #[TestDox("Header attribute must send headers correctly")]
+    public function testResponseHeader()
+    {
+        $response = $this->client->get("/unit/header");
+        $headers = $response->getHeaders();
+        $body = $this->getResponseData($response);
+
+        $this->assertArrayHasKey("MyHeader", $headers);
+        $this->assertArrayHasKey("OtherHeader", $headers);
+
+        $this->assertEquals("My Header Content", $headers["MyHeader"][0]);
+        $this->assertEquals("This is another header", $headers["OtherHeader"][0]);
+
+        $this->assertEquals("Testing header", $body);
     }
 }
