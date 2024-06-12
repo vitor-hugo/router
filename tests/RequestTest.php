@@ -153,4 +153,20 @@ class RequestTest extends TestCase
         $this->assertEquals(256, $response->getStatusCode());
         $this->assertEquals("Testing HTTP status code", $body);
     }
+
+    public function testMustRedirectToInsideRoute()
+    {
+        $response = $this->client->get("/unit/redirect/inside", ['allow_redirects' => true]);
+        $body = $this->getResponseData($response);
+        $this->assertEquals("get request", $body);
+    }
+
+    public function testMustRedirectToOutsideRoute()
+    {
+        $response = $this->client->get("/unit/redirect/outside", ['allow_redirects' => true]);
+        $body = $response->getBody()->getContents();
+        $json = json_decode($body, true);
+        $this->assertArrayHasKey("usd", $json);
+        $this->assertArrayHasKey("brl", $json["usd"]);
+    }
 }

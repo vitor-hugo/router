@@ -13,6 +13,7 @@ use Torugo\Router\Attributes\Request\Put;
 use Torugo\Router\Attributes\Request\Route;
 use Torugo\Router\Attributes\Response\Header;
 use Torugo\Router\Attributes\Response\HttpCode;
+use Torugo\Router\Attributes\Response\Redirect;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Request;
 
@@ -104,5 +105,19 @@ class UnitController
     public function statusCode()
     {
         return "Testing HTTP status code";
+    }
+
+    #[Get("/redirect/inside")]
+    #[Redirect('/unit')]
+    public function redirectInside()
+    {
+        return "redirecting to inside route";
+    }
+
+    #[Get("/redirect/outside")]
+    #[Redirect("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json")]
+    public function redirectOutside()
+    {
+        return "redirecting to inside route";
     }
 }
