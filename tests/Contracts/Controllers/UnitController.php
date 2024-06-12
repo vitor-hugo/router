@@ -2,6 +2,8 @@
 
 namespace Tests\Router\Contracts\Controllers;
 
+use Tests\Router\Contracts\Middlewares\UnitMiddleware;
+use Torugo\Router\Attributes\Middleware;
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Delete;
 use Torugo\Router\Attributes\Request\Get;
@@ -78,5 +80,12 @@ class UnitController
         $requestData = Request::getData();
         $requestData["id"] = $id;
         return $requestData;
+    }
+
+    #[Get("/middleware")]
+    #[Middleware(UnitMiddleware::class, 'unit', ["data" => "This data was defined in a middleware"])]
+    public function middleware()
+    {
+        return "this is de main data";
     }
 }

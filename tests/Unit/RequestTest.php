@@ -118,5 +118,15 @@ class SimpleRequestTest extends TestCase
         $this->assertArrayIsEqualToArrayIgnoringListOfKeys($payload, $data, ["id"]);
         $this->assertEquals("12345", $data["id"]);
     }
+
+    #[TestDox("Middleware must include some data in the response")]
+    public function testMiddlewareIncludesData()
+    {
+        $response = $this->client->get("/unit/middleware");
+        $body = $response->getBody()->getContents();
+        $json = json_decode($body, true);
+
+        $this->assertEquals("this is de main data", $json["data"]);
+        $this->assertEquals("This data was defined in a middleware", $json["middleware"]);
     }
 }
