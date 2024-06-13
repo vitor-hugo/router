@@ -16,9 +16,9 @@ stop-server:
 	) && [ -n "$$PID" ] && kill $$PID || true
 
 test: start-server
-	vendor/bin/phpunit tests --display-errors --display-warnings --display-deprecations
+	vendor/bin/phpunit --display-errors --display-warnings --display-deprecations
 	$(MAKE) stop-server
 
 testdox: start-server
-	vendor/bin/phpunit tests --no-progress --testdox --display-errors --display-warnings --display-deprecations
+	vendor/bin/phpunit --no-progress --testdox --display-errors --display-warnings --display-deprecations
 	$(MAKE) stop-server
