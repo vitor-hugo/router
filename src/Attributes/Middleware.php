@@ -33,7 +33,7 @@ class Middleware
 
     private function getMiddlewareName(): string
     {
-        $arr = explode("/", $this->middleware);
+        $arr = explode("\\", $this->middleware);
         return end($arr);
     }
 }
