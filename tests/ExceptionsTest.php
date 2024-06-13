@@ -2,6 +2,7 @@
 
 namespace Tests\Router;
 
+use GuzzleHttp\Client;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Tests\Router\Contracts\Controllers\DuplicatedRouteController;
@@ -17,10 +18,12 @@ use Torugo\Router\Router;
 class ExceptionsTest extends TestCase
 {
     private Router $router;
+    private Client $client;
 
     public function setUp(): void
     {
         $this->router = new Router;
+        $this->client = new Client(["base_uri" => "http://localhost:8000", "http_errors" => false]);
     }
 
     #[TestDox("Must throw InvalidRouteException when trying to set a invalid route prefix")]
@@ -101,5 +104,13 @@ class ExceptionsTest extends TestCase
             $this->assertEquals("Torugo\Router\Exceptions\InvalidResponseException", $exception);
             $this->assertEquals("The HTTP status code must be from 100 to 599, '600' received.", $th->getMessage());
         }
+    }
+
+    #[TestDox("Must throw InvalidRequestMethod when receiving a invalid request method")]
+    public function testShouldThrowWhenReceivingInvalidRequestMethod()
+    {
+        $response = $this->client->request("options", "/unit");
+        $body = $response->getBody()->getContents();
+        $this->assertEquals("The request method 'options' is not allowed.", $body);
     }
 }
