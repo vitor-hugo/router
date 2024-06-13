@@ -4,6 +4,7 @@ namespace Tests\Router\Contracts\Controllers;
 
 use Torugo\Router\Attributes\Request\Controller;
 use Torugo\Router\Attributes\Request\Get;
+use Torugo\Router\Attributes\Response\HttpCode;
 use Torugo\Router\Attributes\Response\Redirect;
 
 #[Controller("/invalid")]
@@ -14,5 +15,19 @@ class InvalidController
     public function invalidRedirectUrl()
     {
         return "invalid";
+    }
+
+    #[Get("/code1")]
+    #[HttpCode(99)]
+    public function statusCode1()
+    {
+        return "invalid status code";
+    }
+
+    #[Get("/code2")]
+    #[HttpCode(600)]
+    public function statusCode2()
+    {
+        return "invalid status code";
     }
 }

@@ -9,6 +9,7 @@ use Tests\Router\Contracts\Controllers\InvalidController;
 use Tests\Router\Contracts\Controllers\NotAController;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Exceptions\InvalidControllerExeception;
+use Torugo\Router\Exceptions\InvalidResponseException;
 use Torugo\Router\Exceptions\InvalidRouteException;
 use Torugo\Router\Router;
 
@@ -69,5 +70,27 @@ class ExceptionsTest extends TestCase
         $this->expectExceptionMessage("Invalid redirection URL.");
         $this->router->register(InvalidController::class);
         $this->router->resolve("/invalid/redirect", RequestMethod::GET);
+    }
+
+    #[TestDox("Must throw InvalidResponseException defining a status code less than 100 or greater than 599.")]
+    public function testShouldThrowWhenDefiningInvalidStatusCode()
+    {
+        $this->router->register(InvalidController::class);
+
+        try {
+            $this->router->resolve("/invalid/code1", RequestMethod::GET);
+        } catch (\Throwable $th) {
+            $exception = get_class($th);
+            $this->assertEquals("Torugo\Router\Exceptions\InvalidResponseException", $exception);
+            $this->assertEquals("The HTTP status code must be from 100 to 599, '99' received.", $th->getMessage());
+        }
+
+        try {
+            $this->router->resolve("/invalid/code2", RequestMethod::GET);
+        } catch (\Throwable $th) {
+            $exception = get_class($th);
+            $this->assertEquals("Torugo\Router\Exceptions\InvalidResponseException", $exception);
+            $this->assertEquals("The HTTP status code must be from 100 to 599, '600' received.", $th->getMessage());
+        }
     }
 }
