@@ -17,6 +17,13 @@ class InvalidController
         return "invalid";
     }
 
+    #[Get("/redirect/code")]
+    #[Redirect("/invalid/redirect", 305)]
+    public function invalidRedirectStatusCode()
+    {
+        return "invalid status code";
+    }
+
     #[Get("/code1")]
     #[HttpCode(99)]
     public function statusCode1()

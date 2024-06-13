@@ -72,6 +72,15 @@ class ExceptionsTest extends TestCase
         $this->router->resolve("/invalid/redirect", RequestMethod::GET);
     }
 
+    #[TestDox("Must throw InvalidRouteException when trying to redirect with invalid status code.")]
+    public function testShouldThrowWhenTryingToRedirectWithInvalidStatusCode()
+    {
+        $this->expectException(InvalidResponseException::class);
+        $this->expectExceptionMessage("The redirection status code '305' is invalid. Please, check documentation.");
+        $this->router->register(InvalidController::class);
+        $this->router->resolve("/invalid/redirect/code", RequestMethod::GET);
+    }
+
     #[TestDox("Must throw InvalidResponseException defining a status code less than 100 or greater than 599.")]
     public function testShouldThrowWhenDefiningInvalidStatusCode()
     {
