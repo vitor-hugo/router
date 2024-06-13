@@ -18,7 +18,7 @@ enum RequestMethod: string
         $case = self::tryFrom($requestMethod);
 
         if (!$case) {
-            throw new InvalidRequestMethod("Invalid request method '$requestMethod'.", 1);
+            throw new InvalidRequestMethod("The request method '$requestMethod' is not allowed.", 1);
         }
 
         return $case;
