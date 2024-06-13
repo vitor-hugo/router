@@ -14,6 +14,7 @@ class Middleware
         public array $args = []
     ) {
         $this->validateMiddlewareClass();
+        $this->validateMiddlewareMethod();
     }
 
     private function validateMiddlewareClass()
