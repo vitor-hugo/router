@@ -169,4 +169,19 @@ class RequestTest extends TestCase
         $this->assertArrayHasKey("usd", $json);
         $this->assertArrayHasKey("brl", $json["usd"]);
     }
+
+    public function testMustReceiveACustomResponse()
+    {
+        $response = $this->client->get("/unit/custom");
+        $header = $response->getHeader("Content-Type");
+        $this->assertEquals("image/png;base64", $header[0]);
+
+        $img = $response->getBody()->getContents();
+        $tempFilename = "/tmp/phpunit.testImage.testFetchWithTempFile";
+        file_put_contents($tempFilename, base64_decode($img));
+        $type = exif_imagetype($tempFilename);
+        unlink($tempFilename);
+        $this->assertTrue($type !== false);
+        $this->assertEquals(IMAGETYPE_PNG, $type);
+    }
 }
