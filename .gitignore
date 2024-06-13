@@ -1,4 +1,3 @@
 /vendor/
 /tests/cache/
-phpunit.xml
 .DS_Store
