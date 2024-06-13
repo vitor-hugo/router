@@ -26,7 +26,7 @@ class HttpCode
     public function validateHttpCode(int $code): void
     {
         if ($code < 100 || $code > 599) {
-            throw new InvalidResponseException("The HTTP status code '$code' is invalid.", 1);
+            throw new InvalidResponseException("The HTTP status code must be from 100 to 599, '$code' received.", 1);
         }
     }
 }
