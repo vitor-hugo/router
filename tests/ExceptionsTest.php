@@ -8,8 +8,11 @@ use PHPUnit\Framework\TestCase;
 use Tests\Router\Contracts\Controllers\DuplicatedRouteController;
 use Tests\Router\Contracts\Controllers\InvalidController;
 use Tests\Router\Contracts\Controllers\NotAController;
+use Tests\Router\Contracts\Middlewares\UnitMiddleware;
+use Torugo\Router\Attributes\Middleware;
 use Torugo\Router\Enums\RequestMethod;
 use Torugo\Router\Exceptions\InvalidControllerExeception;
+use Torugo\Router\Exceptions\InvalidMiddlewareException;
 use Torugo\Router\Exceptions\InvalidResponseException;
 use Torugo\Router\Exceptions\InvalidRouteException;
 use Torugo\Router\Router;
@@ -112,5 +115,21 @@ class ExceptionsTest extends TestCase
         $response = $this->client->request("options", "/unit");
         $body = $response->getBody()->getContents();
         $this->assertEquals("The request method 'options' is not allowed.", $body);
+    }
+
+    #[TestDox("Must throw InvalidMiddlewareException when middleware class does not exists")]
+    public function testShouldThrowWhenTryingToUseANonexistentMiddleware()
+    {
+        $this->expectException(InvalidMiddlewareException::class);
+        $this->expectExceptionMessage("Middleware 'NonexistentClass' not found.");
+        new Middleware("NonexistentClass", "method");
+    }
+
+    #[TestDox("Must throw InvalidMiddlewareException when middleware method does not exists")]
+    public function testShouldThrowWhenTryingToUseANonexistentMiddlewareMethod()
+    {
+        $this->expectException(InvalidMiddlewareException::class);
+        $this->expectExceptionMessage("The method 'nonexistent' does not exists in 'UnitMiddleware'");
+        new Middleware(UnitMiddleware::class, "nonexistent");
     }
 }
