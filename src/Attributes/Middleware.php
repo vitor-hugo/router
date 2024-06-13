@@ -27,7 +27,7 @@ class Middleware
     private function validateMiddlewareMethod()
     {
         if (!method_exists($this->middleware, $this->method)) {
-            throw new InvalidMiddlewareException("The method '$this->method' does not exists in '{$this->getMiddlewareName()}'", 2);
+            throw new InvalidMiddlewareException("The method '{$this->method}' does not exists in '{$this->getMiddlewareName()}'", 2);
         }
     }
 
