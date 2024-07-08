@@ -1,6 +1,3 @@
-> [!NOTE]
-> THIS PACKAGE IS UNDER DEVELOPMENT.
-
 # Router <!-- omit in toc -->
 
 A simple PHP router system.  
