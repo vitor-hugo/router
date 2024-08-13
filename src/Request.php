@@ -26,6 +26,10 @@ final class Request
             parse_str(file_get_contents('php://input'), $data);
         }
 
+        if (empty($data) && !empty($_POST)) {
+            return $_POST;
+        }
+
         return $data ?? [];
     }
 
