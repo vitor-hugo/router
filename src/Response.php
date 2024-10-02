@@ -29,6 +29,15 @@ final class Response
     }
 
     /**
+     * Clears the data included by 'include' method
+     * @return void
+     */
+    public static function clearIncludedData(): void
+    {
+        self::$includes = [];
+    }
+
+    /**
      * Sends the response, if the data type is array it will be sent as JSON,
      * in other cases will be sent as RAW data
      * @param mixed $data
