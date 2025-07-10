@@ -261,9 +261,9 @@ class Router
             }
 
             if (str_starts_with($uriPart, "{")) {
-                $routeParameter = explode(' ', preg_replace('/{([\w\-%]+)(<(.+)>)?}/', '$1 $3', $uriPart));
+                $routeParameter = explode(" ", preg_replace('/{([\w\-%]+)(<(.+)>)?}/', '$1', $uriPart));
                 $argName = $routeParameter[0];
-                $argRegExp = (empty($routeParameter[1]) ? '[\w\-\@]+' : $routeParameter[1]);
+                $argRegExp = empty($routeParameter[1]) ? '[\w\-\@]+' : $routeParameter[1];
 
                 if (preg_match('/^' . $argRegExp . '$/', $requestUriArray[$index])) {
                     $args[$argName] = $requestUriArray[$index];
