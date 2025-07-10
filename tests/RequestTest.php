@@ -3,6 +3,7 @@
 namespace Tests\Router;
 
 use GuzzleHttp\Client;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -183,5 +184,27 @@ class RequestTest extends TestCase
         unlink($tempFilename);
         $this->assertTrue($type !== false);
         $this->assertEquals(IMAGETYPE_PNG, $type);
+    }
+
+    #[TestDox("Should resolve multi parameter route")]
+    public function testMultipleParams()
+    {
+        $response = $this->client->get("/unit/multi/testA/testB");
+        $data = $this->getResponseData($response);
+        $this->assertIsArray($data);
+        $this->assertTrue(count($data) == 2);
+        $this->assertEquals($data[0], "testA");
+        $this->assertEquals($data[1], "testB");
+    }
+
+    #[TestDox("Should resolve multi parameter route with fixed")]
+    public function testMultipleParamsWithFixed()
+    {
+        $response = $this->client->get("/unit/multi/testA/fixed/testB");
+        $data = $this->getResponseData($response);
+        $this->assertIsArray($data);
+        $this->assertTrue(count($data) == 2);
+        $this->assertEquals($data[0], "testA");
+        $this->assertEquals($data[1], "testB");
     }
 }

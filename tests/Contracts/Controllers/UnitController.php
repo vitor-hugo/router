@@ -63,6 +63,18 @@ class UnitController
         return $value;
     }
 
+    #[Route('/multi/{param1}/{param2}', RequestMethod::GET)]
+    public function multiParams(string $param1, string $param2)
+    {
+        return [$param1, $param2];
+    }
+
+    #[Route('/multi/{param1}/fixed/{param2}', RequestMethod::GET)]
+    public function multiParamsWithFixed(string $param1, string $param2)
+    {
+        return [$param1, $param2];
+    }
+
     #[Route('/patch/{id}', RequestMethod::PATCH)]
     public function patchRoute(string $id)
     {
