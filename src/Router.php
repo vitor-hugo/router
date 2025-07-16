@@ -261,9 +261,8 @@ class Router
             }
 
             if (str_starts_with($uriPart, "{")) {
-                $routeParameter = explode(" ", preg_replace('/{([\w\-%]+)(<(.+)>)?}/', '$1', $uriPart));
-                $argName = $routeParameter[0];
-                $argRegExp = empty($routeParameter[1]) ? '[\w\-\@]+' : $routeParameter[1];
+                $argName = preg_replace('/{([\w\-%\.]+)}/', '$1', $uriPart);
+                $argRegExp = '[\w\-\@]+';
 
                 if (preg_match('/^' . $argRegExp . '$/', $requestUriArray[$index])) {
                     $args[$argName] = $requestUriArray[$index];
@@ -338,6 +337,12 @@ class Router
         }
 
         $redirect = $attributes[0]->newInstance();
+
+        $url = $redirect->url;
+        if (strlen($this->prefix) && $url[0] == "/" && !str_starts_with($url, $this->prefix)) {
+            $url = $this->prefix . $url;
+        }
+
         Request::redirect($redirect->url, $redirect->statusCode);
     }
 
