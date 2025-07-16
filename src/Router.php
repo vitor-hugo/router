@@ -337,13 +337,17 @@ class Router
         }
 
         $redirect = $attributes[0]->newInstance();
-
         $url = $redirect->url;
-        if (strlen($this->prefix) && $url[0] == "/" && !str_starts_with($url, $this->prefix)) {
+
+        if (
+            strlen($this->prefix)
+            && str_starts_with($url, "/")
+            && !str_starts_with($url, $this->prefix)
+        ) {
             $url = $this->prefix . $url;
         }
 
-        Request::redirect($redirect->url, $redirect->statusCode);
+        Request::redirect($url, $redirect->statusCode);
     }
 
     private function setResponseHttpCode(Endpoint $endpoint): void
