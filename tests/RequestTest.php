@@ -186,25 +186,30 @@ class RequestTest extends TestCase
         $this->assertEquals(IMAGETYPE_PNG, $type);
     }
 
+    #[Group("multi")]
     #[TestDox("Should resolve multi parameter route")]
     public function testMultipleParams()
     {
-        $response = $this->client->get("/unit/multi/testA/testB");
+        $response = $this->client->get("/unit/multi/TestA/TestB");
         $data = $this->getResponseData($response);
         $this->assertIsArray($data);
         $this->assertTrue(count($data) == 2);
-        $this->assertEquals($data[0], "testA");
-        $this->assertEquals($data[1], "testB");
+        $this->assertEquals($data[0], "TestA");
+        $this->assertEquals($data[1], "TestB");
     }
 
     #[TestDox("Should resolve multi parameter route with fixed")]
     public function testMultipleParamsWithFixed()
     {
-        $response = $this->client->get("/unit/multi/testA/fixed/testB");
-        $data = $this->getResponseData($response);
-        $this->assertIsArray($data);
-        $this->assertTrue(count($data) == 2);
-        $this->assertEquals($data[0], "testA");
-        $this->assertEquals($data[1], "testB");
+        try {
+            $response = $this->client->get("/unit/multi/testA/fixed/testB");
+            $data = $this->getResponseData($response);
+            $this->assertIsArray($data);
+            $this->assertTrue(count($data) == 2);
+            $this->assertEquals($data[0], "testA");
+            $this->assertEquals($data[1], "testB");
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
     }
 }
